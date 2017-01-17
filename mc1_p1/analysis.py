@@ -14,17 +14,39 @@ def assess_portfolio(sd = dt.datetime(2008,1,1), ed = dt.datetime(2009,1,1), \
     sv=1000000, rfr=0.0, sf=252.0, \
     gen_plot=False):
 
+    # rfr is risk free rate
+
     # Read in adjusted closing prices for given symbols, date range
     dates = pd.date_range(sd, ed)
     prices_all = get_data(syms, dates)  # automatically adds SPY
+
     prices = prices_all[syms]  # only portfolio symbols
+    #print prices
     prices_SPY = prices_all['SPY']  # only SPY, for comparison later
 
     # Get daily portfolio value
-    port_val = prices_SPY # add code here to compute daily portfolio values
+    prices_norm = prices / prices.ix[0] * allocs * sv
+    #print prices_norm.head()
+    port_val = prices_norm.sum(axis = 1) # add code here to compute daily portfolio values
+    dr = port_val - port_val.ix[0]
+    dr = dr[1:];
+    #############Portfolio Statistic###############
+    #Cumulative Reture
+    cr = port_val.ix[-1]/port_val.ix[0]-1
+
+    #Average Daliy Return
+    adr = dr.mean()
+
+    #Std_daliy return(Volatility)
+    sddr = dr.std()
+
+    # Sharp Ratio
+    sr = (dr-rfr).mean()/(dr-rfr).std() * (sf**0.5)
+
+    #print dr.head()
 
     # Get portfolio statistics (note: std_daily_ret = volatility)
-    cr, adr, sddr, sr = [0.25, 0.001, 0.0005, 2.1] # add code here to compute stats
+    #cr, adr, sddr, sr = [0.25, 0.001, 0.0005, 2.1] # add code here to compute stats
 
     # Compare daily portfolio value with SPY using a normalized plot
     if gen_plot:
