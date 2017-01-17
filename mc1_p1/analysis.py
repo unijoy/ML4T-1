@@ -30,7 +30,7 @@ def assess_portfolio(sd = dt.datetime(2008,1,1), ed = dt.datetime(2009,1,1), \
     port_val = prices_norm.sum(axis = 1) # add code here to compute daily portfolio values
     dr = (port_val[1:]/port_val[:-1].values) - 1
     #dr = dr[1:];
-    print dr.head()
+    
     #############Portfolio Statistic###############
     #Cumulative Reture
     cr = port_val.ix[-1]/port_val.ix[0]-1
