@@ -28,8 +28,9 @@ def assess_portfolio(sd = dt.datetime(2008,1,1), ed = dt.datetime(2009,1,1), \
     prices_norm = prices / prices.ix[0] * allocs * sv
     #print prices_norm.head()
     port_val = prices_norm.sum(axis = 1) # add code here to compute daily portfolio values
-    dr = port_val - port_val.ix[0]
-    dr = dr[1:];
+    dr = (port_val[1:]/port_val[:-1].values) - 1
+    #dr = dr[1:];
+    print dr.head()
     #############Portfolio Statistic###############
     #Cumulative Reture
     cr = port_val.ix[-1]/port_val.ix[0]-1
@@ -55,7 +56,7 @@ def assess_portfolio(sd = dt.datetime(2008,1,1), ed = dt.datetime(2009,1,1), \
         pass
 
     # Add code here to properly compute end value
-    ev = sv
+    ev = port_val[-1]
 
     return cr, adr, sddr, sr, ev
 
@@ -66,8 +67,8 @@ def test_code():
     # Define input parameters
     # Note that ALL of these values will be set to different values by
     # the autograder!
-    start_date = dt.datetime(2009,1,1)
-    end_date = dt.datetime(2010,1,1)
+    start_date = dt.datetime(2010,1,1)
+    end_date = dt.datetime(2010,12,31)
     symbols = ['GOOG', 'AAPL', 'GLD', 'XOM']
     allocations = [0.2, 0.3, 0.4, 0.1]
     start_val = 1000000  
